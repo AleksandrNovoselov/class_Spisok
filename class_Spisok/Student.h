@@ -3,23 +3,23 @@
 #include <string>
 using namespace std;
 
-class Node
+class Student
 {
 	string _name;
 	int _phoneNumber;
 	string _address;
 public:
-	Node() {
+	Student() {
 		_phoneNumber = 0;
 		_next = nullptr;
 		_prev = nullptr;
 	}
-	Node(string name, int phoneNumber, string address) :
+	Student(string name, int phoneNumber, string address) :
 		_name{ name }, _phoneNumber{ phoneNumber }, _address{ address }, _next{ nullptr }{}
-	~Node() {}
+	~Student() {}
 
-	Node* _next;
-	Node* _prev;
+	Student* _next;
+	Student* _prev;
 
 	string getName() {return _name;}
 	int getPhone() const {return _phoneNumber;}

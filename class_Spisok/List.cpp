@@ -4,24 +4,24 @@ void List::add(string name, int phoneNumber, string address)
 {
 	if (_head == nullptr)
 	{
-		_head = new Node(name, phoneNumber, address);
+		_head = new Student(name, phoneNumber, address);
 	}
 	else
 	{
-		Node* current = _head;
+		Student* current = _head;
 
 		while (current->_next != nullptr)
 		{
 			current = current->_next;
 		}
-		current->_next= new Node(name, phoneNumber, address);
+		current->_next= new Student(name, phoneNumber, address);
 	}
 	_size++;
 }
 
 void List::print()
 {
-	Node* current = _head;
+	Student* current = _head;
 	printNode(current);
 
 	while (current->_next != nullptr)
@@ -31,7 +31,7 @@ void List::print()
 	}
 }
 
-void List::printNode(Node* current)
+void List::printNode(Student* current)
 {
 	cout << current->getName() << " ; " << current->getPhone() << " ; " << current->getAddress() << endl;
 }
@@ -39,7 +39,7 @@ void List::printNode(Node* current)
 int& List::operator[](const int index)
 {
 	int counter{ 0 };
-	Node* current = _head;
+	Student* current = _head;
 	while (current != nullptr)
 	{
 		if (counter == index)
@@ -54,7 +54,7 @@ int& List::operator[](const int index)
 
 void List::pop_front()
 {
-	Node *tmp = _head;
+	Student *tmp = _head;
 	_head = _head->_next;
 	delete tmp;
 	_size--;
@@ -64,4 +64,64 @@ void List::clear()
 {
 	while (_size)
 		pop_front();
+}
+
+void List::pushFront(string name,int phoneNumber, string address)
+{
+	Student* current = new Student(name, phoneNumber, address);
+	current->_next = _head;
+	_head = current;
+	_size++;
+}
+
+void List::insert(string name, int phoneNumber, string address, int index)
+{
+	if (index == 0)
+		pushFront(name, phoneNumber, address);
+	else
+	{
+		Student* newNode = new Student(name, phoneNumber, address);
+
+		Student* current = _head;
+		Student* previous = _head;
+
+		for (int i = 0; i < index; i++) {
+			current = current->_next;
+		}
+
+		for (int i = index - 1; i < index ; i++) {
+			previous = previous->_next;
+		}
+				
+		previous->_next = newNode;
+		newNode->_next = current;
+
+		_size++;
+	}
+}
+
+void List::remov(int index)
+{
+	if (index == 0)
+		pop_front();
+	else
+	{
+		Student* previous = _head;
+
+		for (int i = 0; i < index - 1; i++) {
+			previous = previous->_next;
+		}
+		Student* toDelete = previous->_next;
+		previous->_next = toDelete->_next;
+
+		delete toDelete;
+
+		_size--;
+	}
+
+}
+
+void List::pop_back()
+{
+	remov(_size-1);
 }
