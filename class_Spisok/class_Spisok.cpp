@@ -23,13 +23,13 @@ int main()
 	cout<<"Размер списка: "<<list.getSize();
 	cout << endl;
 
-	//cout << "удаление указанного элемента" << endl;
-	//list.remov(2);
-	//list.print();
+	cout << "удаление указанного элемента" << endl;
+	list.remov(2);
+	list.print();
 
-	//cout << "удаление последнего элемента" << endl;
-	//list.pop_back();
-	//list.print();*/
+	cout << "удаление последнего элемента" << endl;
+	list.pop_back();
+	list.print();
 
 }
 

@@ -80,7 +80,8 @@ void List::pop_front()
 {
 	Student *tmp = _head;
 	_head = _head->next;
-	tmp->prev = nullptr;
+	if(_head!=nullptr)
+		_head->prev = nullptr;
 	delete tmp;
 	_size--;
 }
@@ -115,14 +116,13 @@ void List::insert(string name, int phoneNumber, string address, int index)
 		Student* studIns = new Student(name, phoneNumber, address);
 
 		Student* studPrev = _head;
-		Student* studNext = _head;
+		Student* studNext;
 
 		for (int i = 0; i < index-1; i++) {
 			studPrev = studPrev->next;
 		}
-		for (int i = 0; i < index ; i++) {
-			studNext = studNext->next;
-		}
+		
+		studNext = studPrev->next;
 
 		studIns->next = studNext;
 		studIns->prev = studPrev;
@@ -138,17 +138,22 @@ void List::remov(int index)
 {
 	if (index == 0)
 		pop_front();
+
 	else
 	{
-		Student* previous = _head;
+		Student* current = _head;
 
-		for (int i = 0; i < index - 1; i++) {
-			previous = previous->next;
+		for (int i = 0; i < index ; i++) {
+			current = current->next;
 		}
-		Student* toDelete = previous->next;
-		previous->next = toDelete->next;
 
-		delete toDelete;
+		Student* studPrev = current->prev;
+		Student* studNext = current->next;
+
+		studPrev->next = studNext;
+		studNext->prev = studPrev;
+
+		delete current;
 
 		_size--;
 	}
@@ -157,5 +162,9 @@ void List::remov(int index)
 
 void List::pop_back()
 {
-	remov(_size-1);
+	Student* current = _tail;
+	_tail = _tail->prev;
+	delete current;
+	_tail->next = nullptr;
+	_size--;
 }
