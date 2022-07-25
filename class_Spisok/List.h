@@ -4,10 +4,10 @@
 class List
 {
 	Student* _head;
-	//Student* _tail;
+	Student* _tail;
 	int _size;
 public:
-	List() :_head{ nullptr }, _size{ 0 } {}
+	List() :_head{ nullptr }, _tail{ nullptr }, _size{ 0 } {}
 	~List() { clear(); }
 
 	void add(string name, int phoneNumber, string address);

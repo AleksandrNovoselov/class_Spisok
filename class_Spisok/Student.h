@@ -11,15 +11,15 @@ class Student
 public:
 	Student() {
 		_phoneNumber = 0;
-		_next = nullptr;
-		_prev = nullptr;
+		next = nullptr;
+		prev = nullptr;
 	}
 	Student(string name, int phoneNumber, string address) :
-		_name{ name }, _phoneNumber{ phoneNumber }, _address{ address }, _next{ nullptr }{}
+		_name{ name }, _phoneNumber{ phoneNumber }, _address{ address }, next{ nullptr }{}
 	~Student() {}
 
-	Student* _next;
-	Student* _prev;
+	Student* next;
+	Student* prev;
 
 	string getName() {return _name;}
 	int getPhone() const {return _phoneNumber;}

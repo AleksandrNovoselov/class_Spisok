@@ -5,16 +5,15 @@ void List::add(string name, int phoneNumber, string address)
 	if (_head == nullptr)
 	{
 		_head = new Student(name, phoneNumber, address);
+		_tail = _head;
 	}
 	else
 	{
-		Student* current = _head;
+		Student* newStud = new Student(name, phoneNumber, address);
 
-		while (current->_next != nullptr)
-		{
-			current = current->_next;
-		}
-		current->_next= new Student(name, phoneNumber, address);
+		newStud->prev = _tail;
+		_tail->next = newStud;
+		_tail = newStud;
 	}
 	_size++;
 }
@@ -24,9 +23,9 @@ void List::print()
 	Student* current = _head;
 	printNode(current);
 
-	while (current->_next != nullptr)
+	while (current->next != nullptr)
 	{
-		current = current->_next;
+		current = current->next;
 		printNode(current);
 	}
 }
@@ -36,26 +35,52 @@ void List::printNode(Student* current)
 	cout << current->getName() << " ; " << current->getPhone() << " ; " << current->getAddress() << endl;
 }
 
-int& List::operator[](const int index)
+int& List::operator[](int index)
 {
-	int counter{ 0 };
-	Student* current = _head;
-	while (current != nullptr)
+	int counter = 0;
+	if (index >= _size)
 	{
-		if (counter == index)
+		cout << "Неверный индекс";
+		return counter;
+	}
+
+	if (index <= _size / 2)
+	{
+		Student* current = _head;
+		while (current != nullptr)
 		{
-			printNode(current);
-			return counter;
+			if (counter == index)
+			{
+				printNode(current);
+				return counter;
+			}
+			current = current->next;
+			counter++;
 		}
-		current = current->_next;
-		counter++;
+	}
+
+	else
+	{
+		counter = _size-1;
+		Student* current = _tail;
+		while (current != nullptr)
+		{
+			if (counter == index)
+			{
+				printNode(current);
+				return counter;
+			}
+			current = current->prev;
+			counter--;
+		}
 	}
 }
 
 void List::pop_front()
 {
 	Student *tmp = _head;
-	_head = _head->_next;
+	_head = _head->next;
+	tmp->prev = nullptr;
 	delete tmp;
 	_size--;
 }
@@ -69,32 +94,41 @@ void List::clear()
 void List::pushFront(string name,int phoneNumber, string address)
 {
 	Student* current = new Student(name, phoneNumber, address);
-	current->_next = _head;
+	current->next = _head;
+	_head->prev = current;
 	_head = current;
 	_size++;
 }
 
 void List::insert(string name, int phoneNumber, string address, int index)
 {
+	if(index>=_size)
+	{
+		cout << "Неверный индекс";
+		return;
+	}
+		
 	if (index == 0)
 		pushFront(name, phoneNumber, address);
 	else
 	{
-		Student* newNode = new Student(name, phoneNumber, address);
+		Student* studIns = new Student(name, phoneNumber, address);
 
-		Student* current = _head;
-		Student* previous = _head;
+		Student* studPrev = _head;
+		Student* studNext = _head;
 
-		for (int i = 0; i < index; i++) {
-			current = current->_next;
+		for (int i = 0; i < index-1; i++) {
+			studPrev = studPrev->next;
+		}
+		for (int i = 0; i < index ; i++) {
+			studNext = studNext->next;
 		}
 
-		for (int i = index - 1; i < index ; i++) {
-			previous = previous->_next;
-		}
-				
-		previous->_next = newNode;
-		newNode->_next = current;
+		studIns->next = studNext;
+		studIns->prev = studPrev;
+
+		studPrev->next = studIns;
+		studNext->prev = studIns;
 
 		_size++;
 	}
@@ -109,10 +143,10 @@ void List::remov(int index)
 		Student* previous = _head;
 
 		for (int i = 0; i < index - 1; i++) {
-			previous = previous->_next;
+			previous = previous->next;
 		}
-		Student* toDelete = previous->_next;
-		previous->_next = toDelete->_next;
+		Student* toDelete = previous->next;
+		previous->next = toDelete->next;
 
 		delete toDelete;
 
